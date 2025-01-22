@@ -1,27 +1,33 @@
 import React, { useState } from 'react';
 
-const Filters = ({ onApplyFilters }) => {
+const Filters = ({ onFilter }) => {
   const [type, setType] = useState('');
   const [status, setStatus] = useState('');
 
-  const applyFilters = () => {
-    onApplyFilters({ type, status });
+  const handleFilter = () => {
+    onFilter({ type, status });
   };
 
   return (
     <div>
-      <h2>Filtros</h2>
-      <select onChange={(e) => setType(e.target.value)}>
-        <option value="">Todos los tipos</option>
-        <option value="proximity">Aproximación</option>
-        <option value="induction">Inducción</option>
-      </select>
-      <select onChange={(e) => setStatus(e.target.value)}>
-        <option value="">Todos los estados</option>
-        <option value="active">Activo</option>
-        <option value="inactive">Inactivo</option>
-      </select>
-      <button onClick={applyFilters}>Aplicar Filtros</button>
+      <h3>Filtrar Sensores</h3>
+      <label>
+        Tipo:
+        <input
+          type="text"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        />
+      </label>
+      <label>
+        Estado:
+        <input
+          type="text"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        />
+      </label>
+      <button onClick={handleFilter}>Aplicar Filtros</button>
     </div>
   );
 };

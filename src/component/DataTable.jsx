@@ -1,29 +1,31 @@
 import React from 'react';
 
-const DataTable = ({ data }) => {
+const DataTable = ({ sensors }) => {
   return (
-    <table border="1" style={{ width: '100%', marginTop: '1rem' }}>
-      <thead>
-        <tr>
-          <th>ID del Sensor</th>
-          <th>Tipo</th>
-          <th>Estado</th>
-          <th>Fecha</th>
-          <th>Distancia</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item) => (
-          <tr key={item.sensor_id}>
-            <td>{item.sensor_id}</td>
-            <td>{item.type}</td>
-            <td>{item.status}</td>
-            <td>{item.timestamp}</td>
-            <td>{item.distance || '-'}</td>
+    <div className="table-responsive">
+      <table className="table table-striped table-bordered">
+        <thead className="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th>Distancia</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {sensors.map((sensor) => (
+            <tr key={sensor.id}>
+              <td>{sensor.id}</td>
+              <td>{sensor.type}</td>
+              <td>{sensor.status}</td>
+              <td>{sensor.timestamp}</td>
+              <td>{sensor.distance || '-'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

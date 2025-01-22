@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div className="container">
-        <Link className="navbar-brand" to="/">
-          Sensor Dashboard
-        </Link>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container-fluid">
+        <Link className="navbar-brand" to="/">Dashboard</Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -22,19 +20,10 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Dashboard
-              </Link>
+              <Link className="nav-link" to="/">Dashboard</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/details">
-                Detalles
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/settings">
-                Configuración
-              </Link>
+              <Link className="nav-link" to="/settings">Configuración</Link>
             </li>
           </ul>
         </div>
