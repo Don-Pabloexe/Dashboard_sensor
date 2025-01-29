@@ -1,70 +1,107 @@
-# Getting Started with Create React App
+# Sensor Monitoring Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Descripción del Proyecto
+Este proyecto es un **dashboard de monitoreo** para sensores de aproximación e inducción. Permite visualizar y filtrar datos en tiempo real, facilitando el análisis de eventos detectados por los sensores.
 
-## Available Scripts
+## Características Principales
+- **Visualización en tiempo real** de eventos capturados por los sensores.
+- **Filtros avanzados** para refinar la búsqueda de datos.
+- **Gráficos interactivos** para representar patrones de detección.
+- **Soporte para múltiples tipos de sensores** con características específicas.
 
-In the project directory, you can run:
+## Datos Capturados
 
-### `npm start`
+### Sensores de Aproximación
+- Estado del sensor (Activado/Desactivado)
+- Distancia detectada (mm, cm, m)
+- Timestamp de detección
+- Duración del evento (segundos)
+- Tipo de objeto detectado (si aplica)
+- Frecuencia de activación
+- Temperatura del sensor
+- Estado de la alimentación (voltaje o batería restante)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Sensores de Inducción
+- Estado del sensor (Activado/Desactivado)
+- Tipo de metal detectado (si aplica)
+- Distancia de detección (mm, cm, m)
+- Intensidad del campo electromagnético (µT)
+- Timestamp de detección
+- Duración del evento (segundos)
+- Frecuencia de eventos
+- Condiciones del sensor (temperatura, corriente, voltaje)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Filtros Disponibles
 
-### `npm test`
+### Básicos
+- **Tipo de sensor** (Aproximación o Inducción)
+- **Fecha y hora** (Intervalo de tiempo)
+- **Estado** (Activado/Desactivado)
+- **Distancia detectada** (Rango de proximidad)
+- **Frecuencia de eventos** (Mínimo/máximo)
+- **Tipo de objeto detectado** (si aplica)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Avanzados
+- **Duración del evento**
+- **Intensidad del campo electromagnético**
+- **Condiciones del sensor** (Voltaje, temperatura)
 
-### `npm run build`
+## Tecnologías Utilizadas
+- **Frontend:** React
+- **Backend:** Node.js con PostgREST
+- **Visualización de Datos:** Chart.js, D3.js
+- **Base de Datos:** PostgreSQL
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Instalación y Ejecución
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Requisitos Previos
+Para ejecutar este proyecto, asegúrate de tener instalado:
+- **Node.js** (descargar desde [nodejs.org](https://nodejs.org/))
+- **PostgreSQL** (descargar desde [postgresql.org](https://www.postgresql.org/))
+- **PostgREST** para la API (instalar según la documentación en [postgrest.org](https://postgrest.org/))
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Instalación
+El backend y el frontend están en la misma carpeta, pero se inician por separado.
 
-### `npm run eject`
+1. Clonar el repositorio:
+```sh
+git clone https://github.com/tuusuario/sensor-dashboard.git
+cd sensor-dashboard
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. Instalar dependencias necesarias:
+```sh
+npm install
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Ejecución del Backend
+El backend está contenido en el archivo `server.js` dentro del mismo directorio del frontend y no requiere configuración adicional.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Para iniciar el backend, usa:
+```sh
+node server.js
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Ejecución del Frontend
+El frontend consume los datos desde el backend a través del archivo `api.js`. Para iniciarlo, ejecuta:
+```sh
+npm start
+```
 
-## Learn More
+El backend se ejecutará en `http://localhost:5000` y el frontend en `http://localhost:3000`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Uso
+1. Iniciar sesión en el dashboard.
+2. Seleccionar el tipo de sensor a visualizar.
+3. Aplicar filtros según los criterios deseados.
+4. Analizar los datos mostrados en tablas y gráficos.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contribución
+1. Realizar un fork del repositorio.
+2. Crear una rama nueva (`feature-nombre`).
+3. Realizar cambios y confirmar (`git commit -m 'Descripción del cambio'`).
+4. Enviar un pull request.
 
-### Code Splitting
+## Licencia
+Este proyecto está licenciado bajo MIT License - consulta el archivo [LICENSE](LICENSE) para más detalles.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
