@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://192.168.101.6:5000/api', // Cambia la URL según tu backend
+  baseURL: 'http://192.168.101.7:5000/api', // Cambia la URL según tu backend
 });
 
 // Función para obtener todos los sensores

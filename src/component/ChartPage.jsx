@@ -2,6 +2,10 @@ import React from 'react';
 import ActivationFrequencyChart from './ActivationFrequencyChart';
 import DistanceOverTimeChart from './DistanceOverTimeChart';
 import SensorStatusChart from './SensorStatusChart';
+import TemperatureStatusChart from './TemperatureStatusChart';
+import VoltageBySensorChart from './VoltageBySensorChart';
+import EventDurationByObjectChart from './EventDurationByObjectChart';
+
 
 const ChartsPage = ({ sensors }) => {
   return (
@@ -16,6 +20,15 @@ const ChartsPage = ({ sensors }) => {
         </div>
         <div className="col-md-12">
           <DistanceOverTimeChart sensors={sensors} />
+        </div>
+        <div className="col-md-6 mb-4">
+          <TemperatureStatusChart sensors={sensors} />
+        </div>
+        <div className="col-md-6 mb-4">
+          <VoltageBySensorChart sensors={sensors} />
+        </div>
+        <div className="col-md-6 mb-4">
+          <EventDurationByObjectChart sensors={sensors} />
         </div>
       </div>
     </div>

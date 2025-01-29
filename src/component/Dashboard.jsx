@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchSensors } from "../services/api";
-import Papa from "papaparse"; // Importar la librería para manejar CSV
+import Papa from "papaparse";
 
-// Componente para mostrar los detalles de un evento
 const EventDetails = ({ event }) => {
   if (!event) return <p>No hay detalles disponibles.</p>;
 
@@ -48,20 +47,35 @@ const EventDetails = ({ event }) => {
 };
 
 const SensorDashboard = () => {
-  const [sensors, setSensors] = useState([]); // Lista de sensores
-  const [groupedSensors, setGroupedSensors] = useState([]); // Sensores agrupados
-  const [selectedSensorEvents, setSelectedSensorEvents] = useState([]); // Eventos del sensor seleccionado
-  const [selectedEvent, setSelectedEvent] = useState(null); // Evento seleccionado
-  const [loadingSensors, setLoadingSensors] = useState(true); // Estado de carga para la lista de sensores
-  const navigate = useNavigate(); // Navegación para ir a gráficos
+  const [sensors, setSensors] = useState([]);
+  const [filteredSensors, setFilteredSensors] = useState([]);
+  const [groupedSensors, setGroupedSensors] = useState([]);
+  const [selectedSensorEvents, setSelectedSensorEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [loadingSensors, setLoadingSensors] = useState(true);
 
-  // Obtener lista de sensores al cargar la vista
+  // Configuración desde Settings
+  const [typeFilter, setTypeFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [visibleColumns, setVisibleColumns] = useState({
+    id: true,
+    type: true,
+    status: true,
+    timestamp: true,
+  });
+  const [theme, setTheme] = useState("light");
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     const getSensors = async () => {
       try {
         const data = await fetchSensors();
-        setSensors(data || []); // Asegurarte de que sea un array
-        groupSensors(data || []); // Agrupar sensores
+        setSensors(data || []);
+        setFilteredSensors(data || []);
+        groupSensors(data || []);
       } catch (error) {
         console.error("Error al cargar los sensores:", error);
       } finally {
@@ -91,7 +105,7 @@ const SensorDashboard = () => {
     const sensorData = groupedSensors.find((sensor) => sensor.sensor_id === sensorId);
     if (sensorData) {
       setSelectedSensorEvents(sensorData.events);
-      setSelectedEvent(null); // Limpiamos el evento seleccionado
+      setSelectedEvent(null);
     }
   };
 
@@ -101,9 +115,37 @@ const SensorDashboard = () => {
     setSelectedEvent(selected);
   };
 
+  // Aplicar filtros
+  const applyFilters = () => {
+    let filtered = sensors;
+
+    if (typeFilter) {
+      filtered = filtered.filter((sensor) => sensor.type === typeFilter);
+    }
+
+    if (statusFilter) {
+      filtered = filtered.filter((sensor) => sensor.status === statusFilter);
+    }
+
+    if (startDate) {
+      filtered = filtered.filter(
+        (sensor) => new Date(sensor.timestamp) >= new Date(startDate)
+      );
+    }
+
+    if (endDate) {
+      filtered = filtered.filter(
+        (sensor) => new Date(sensor.timestamp) <= new Date(endDate)
+      );
+    }
+
+    setFilteredSensors(filtered);
+    groupSensors(filtered);
+  };
+
   // Exportar datos a CSV
   const exportToCSV = () => {
-    const csvData = sensors.map((sensor) => ({
+    const csvData = filteredSensors.map((sensor) => ({
       ID: sensor.sensor_id,
       Tipo: sensor.type,
       Estado: sensor.status,
@@ -122,31 +164,75 @@ const SensorDashboard = () => {
 
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "sensors_data.csv");
+    link.setAttribute("download", "filtered_sensors_data.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   return (
-    <div className="container mt-5">
+    <div className={`container mt-5 ${theme === "dark" ? "bg-dark text-white" : ""}`}>
       <h1 className="text-center mb-4">Dashboard de Sensores</h1>
       <div className="d-flex justify-content-between mb-4">
-        {/* Botón para ir a los gráficos */}
-        <button
-          className="btn btn-success"
-          onClick={() => navigate("/charts")}
-        >
+        <button className="btn btn-success" onClick={() => navigate("/charts")}>
           Ver Gráficos
         </button>
-
-        {/* Botón para exportar CSV */}
         <button className="btn btn-primary" onClick={exportToCSV}>
-          Exportar Datos a CSV
+          Exportar Datos Filtrados a CSV
         </button>
       </div>
+
+      {/* Filtros */}
+      <div className="row mb-4">
+        <div className="col-md-3">
+          <label>Tipo de Sensor:</label>
+          <select
+            className="form-select"
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+          >
+            <option value="">Todos</option>
+            <option value="proximity">Aproximación</option>
+            <option value="induction">Inducción</option>
+          </select>
+        </div>
+        <div className="col-md-3">
+          <label>Estado del Sensor:</label>
+          <select
+            className="form-select"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="">Todos</option>
+            <option value="active">Activo</option>
+            <option value="inactive">Inactivo</option>
+          </select>
+        </div>
+        <div className="col-md-3">
+          <label>Fecha de Inicio:</label>
+          <input
+            type="date"
+            className="form-control"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+        </div>
+        <div className="col-md-3">
+          <label>Fecha de Fin:</label>
+          <input
+            type="date"
+            className="form-control"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </div>
+      </div>
+      <button className="btn btn-secondary mb-4" onClick={applyFilters}>
+        Aplicar Filtros
+      </button>
+
+      {/* Tabla de Sensores */}
       <div className="row">
-        {/* Columna de la lista de sensores */}
         <div className="col-md-6">
           <h3>Lista de Sensores</h3>
           {loadingSensors ? (
@@ -159,18 +245,20 @@ const SensorDashboard = () => {
             <table className="table table-striped table-bordered">
               <thead className="table-dark">
                 <tr>
-                  <th>ID</th>
-                  <th>Tipo</th>
-                  <th>Total Eventos</th>
+                  {visibleColumns.id && <th>ID</th>}
+                  {visibleColumns.type && <th>Tipo</th>}
+                  {visibleColumns.status && <th>Estado</th>}
+                  {visibleColumns.timestamp && <th>Timestamp</th>}
                   <th>Acción</th>
                 </tr>
               </thead>
               <tbody>
                 {groupedSensors.map((sensor) => (
                   <tr key={sensor.sensor_id}>
-                    <td>{sensor.sensor_id}</td>
-                    <td>{sensor.type}</td>
-                    <td>{sensor.events.length}</td>
+                    {visibleColumns.id && <td>{sensor.sensor_id}</td>}
+                    {visibleColumns.type && <td>{sensor.type}</td>}
+                    {visibleColumns.status && <td>{sensor.status}</td>}
+                    {visibleColumns.timestamp && <td>{new Date(sensor.timestamp).toLocaleString()}</td>}
                     <td>
                       <button
                         className="btn btn-info btn-sm"
@@ -186,12 +274,11 @@ const SensorDashboard = () => {
           )}
         </div>
 
-        {/* Columna de los eventos del sensor */}
+        {/* Detalles del Sensor */}
         <div className="col-md-6">
           <h3>Eventos del Sensor</h3>
           {selectedSensorEvents.length > 0 ? (
             <div>
-              {/* Dropdown de eventos */}
               <select
                 className="form-select"
                 onChange={(e) => handleEventSelect(e.target.value)}
@@ -206,8 +293,6 @@ const SensorDashboard = () => {
                   </option>
                 ))}
               </select>
-
-              {/* Detalles del evento seleccionado */}
               <div className="mt-3">
                 {selectedEvent ? (
                   <EventDetails event={selectedEvent} />
@@ -226,3 +311,4 @@ const SensorDashboard = () => {
 };
 
 export default SensorDashboard;
+    
